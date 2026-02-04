@@ -13,7 +13,7 @@ RUN npm install
 # Copiamos el resto del proyecto
 COPY . .
 
-# Exponemos el puerto (ajusta si usas otro)
+# Exponemos el puerto
 EXPOSE 8080
 
 # Comando para levantar el servidor

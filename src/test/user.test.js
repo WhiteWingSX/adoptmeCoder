@@ -1,6 +1,5 @@
 import supertest from "supertest";
 import { expect } from "chai";
-import mongoose from "mongoose";
 
 const request = supertest("http://localhost:8080");
 

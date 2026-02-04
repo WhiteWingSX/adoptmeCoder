@@ -24,8 +24,6 @@ app.use('/api/adoptions',adoptionsRouter);
 app.use('/api/sessions',sessionsRouter);
 app.use('/api/mocks',mocksRouter);
 
-// app.listen(PORT,()=>console.log(`Listening on ${PORT}`))
-
 mongoose.connect(MONGO_URL)
     .then(() => {
         console.log("Conectado al servidor");
