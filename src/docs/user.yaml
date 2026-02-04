@@ -1,0 +1,206 @@
+#DEFINE LOS ENDPOINTS DE LA API PARA SUS SUBRUTAS
+paths:
+  # ESPECIFICACIONES DE LA RUTA Y LOS METODOS QUE ADMITE
+  /api/users:
+    get:
+      # Descripciones del endpoint
+      summary: Listado completo de todos los usuarios
+      description: Retorna todos los usuarios registrados en la base de datos
+      tags:
+        - Users
+        # POSIBLES RESPUESTAS DEL ENDPOINT
+      responses:
+        # llamado exitoso
+        200:
+          description: Listado de usuarios obtenido correctamente
+          content:
+            # Tipo de respuesta
+            application/json:
+              # Estructura de la respuesta
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    type: array
+                    items:
+                      # Estructura del objeto devuelto
+                      $ref: '#/components/schemas/User'
+
+  /api/users/{uid}:
+    get:
+      # Descripciones del endpoint
+      summary: Obtener un usuario por ID
+      description: Retorna el usuario con el ID especificado
+      tags:
+        - Users
+        # POSIBLES RESPUESTAS DEL ENDPOINT
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: string
+      responses:
+        # llamado exitoso
+        200:
+          description: Usuario encontrado
+          content:
+            # Tipo de respuesta
+            application/json:
+              schema:
+                # Estructura de la respuesta
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    # Estructura del objeto devuelto
+                    $ref: '#/components/schemas/User'
+        # llamado fallido
+        404:
+          description: Usuario no encontrado
+          content:
+            # Tipo de respuesta
+            application/json:
+              schema:
+                # Estructura de la respuesta
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      # Descripciones del endpoint
+      summary: Actualizar un usuario
+      description: Actualiza los datos de un usuario con el ID especificado
+      tags:
+        - Users
+        # POSIBLES RESPUESTAS DEL ENDPOINT
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            # Estructura de la respuesta
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              # Estructura del objeto a actualizar
+              $ref: '#/components/schemas/UserUpdate'
+      responses:
+        # llamado exitoso
+        200:
+          description: Usuario actualizado correctamente
+          content:
+            # Tipo de respuesta
+            application/json:
+              schema:
+                # Estructura de la respuesta
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: User updated
+        # llamado fallido
+        404:
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                # Estructura de la respuesta
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      # Descripciones del endpoint
+      summary: Eliminar un usuario
+      description: Elimina un usuario con el ID especificado
+      tags:
+        - Users
+        # POSIBLES RESPUESTAS DEL ENDPOINT
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: string
+      responses:
+        # llamado exitoso
+        200:
+          description: Usuario eliminado correctamente
+          content:
+            # Tipo de respuesta
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: User deleted
+
+components:
+  schemas:
+    User:
+      type: object
+      description: Datos de un usuario registrado en la base de datos
+      properties:
+        _id:
+          type: string
+          example: 64b0cfcf3a4f1c0012d12345
+        first_name:
+          type: string
+          example: Juan
+        last_name:
+          type: string
+          example: Pérez
+        email:
+          type: string
+          example: juanperez@mail.com
+        role:
+          type: string
+          example: user
+        pets:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+                example: 64b0cfcf3a4f1c0099d54321
+
+    UserUpdate:
+      type: object
+      description: Datos a actualizar en un usuario
+      properties:
+        first_name:
+          type: string
+          example: Kratos
+        last_name:
+          type: string
+          example: Spartan
+        role:
+          type: string
+          example: admin
+
+    ErrorResponse:
+      type: object
+      description: Respuesta de error
+      properties:
+        status:
+          type: string
+          example: error
+        error:
+          type: string
+          example: User not found
